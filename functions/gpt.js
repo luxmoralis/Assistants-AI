@@ -42,11 +42,48 @@ export async function getAssistants(discordServerId) {
   return assistants.data;
 }
 
+// Function to create an assistant with OpenAI for a Discord server
+export async function createAssistant(
+  discordServerId,
+  assistantName,
+  instructions,
+  tools,
+  model
+) {
+  const client = await getOrCreateOpenAIClient(discordServerId);
+  const assistant = await client.beta.assistants.create({
+    name: assistantName,
+    instructions: instructions,
+    tools: tools,
+    model: model,
+  });
+  return assistant;
+}
+
+// Function to delete an assistant with OpenAI for a Discord server
+export async function deleteAssistant(discordServerId, assistantId) {
+  const client = await getOrCreateOpenAIClient(discordServerId);
+  try {
+    await client.beta.assistants.del(assistantId);
+    return true;
+  } catch (error) {
+    console.error(`Failed to delete assistant: ${error}`);
+    return false;
+  }
+}
+
 // Function to create a thread and send a message with OpenAI for a Discord server
 export async function createThread(discordServerId) {
   const client = await getOrCreateOpenAIClient(discordServerId);
   const thread = await client.beta.threads.create();
   return thread;
+}
+
+// Function to delete a thread with OpenAI for a Discord server
+export async function deleteThread(discordServerId, threadId) {
+  const client = await getOrCreateOpenAIClient(discordServerId);
+  const response = await client.beta.threads.del(threadId);
+  return response;
 }
 
 // Function to add a message to a thread with OpenAI for a Discord server

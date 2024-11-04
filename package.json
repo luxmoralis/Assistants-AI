@@ -1,0 +1,27 @@
+{
+  "name": "assistants-ai",
+  "version": "1.0.0",
+  "description": "**Assistants-AI** is a connector that allows seamless integration between the OpenAI Assistants API and Discord. This project enables users to interact with AI models through Discord by integrating the OpenAI Assistants API, providing intelligent conversational abilities directly within Discord channels.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/rest": "^2.4.0",
+    "@prisma/client": "^5.21.1",
+    "discord-api-types": "^0.37.103",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "openai": "^4.68.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "prisma": "^5.21.1"
+  }
+}

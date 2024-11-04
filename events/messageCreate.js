@@ -26,11 +26,6 @@ export default {
       conversationThread.openAIAssistantID
     );
 
-    // create a message algorithm that sends the completion to the thread
-    // However, if the completion is greater than 2000 characters, we need to split it into multiple messages
-    // we also need to ensure that we do not cut off in the middle of a sentence
-    // hence we need to find the last new line character before the 2000th character
-
     if (completion.length > 2000) {
       let remainingCompletion = completion;
       const messages = [];

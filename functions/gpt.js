@@ -112,5 +112,8 @@ export async function runCompletion(discordServerId, threadId, assistantId) {
         .join("");
     }
   }
+
+  message = message.replace(/【\d+:\d+†source】/g, "");
+
   return message;
 }

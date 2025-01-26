@@ -15,9 +15,6 @@ RUN npm install
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose the port the app runs on
-EXPOSE 3000
-
 RUN npx prisma generate
 
 # Define the command to run the app

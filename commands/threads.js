@@ -1,6 +1,7 @@
 import * as gpt from "../functions/gpt.js";
 import * as database from "../functions/database.js";
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import { logger } from "../logger.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -133,7 +134,14 @@ export default {
 
       // Clear all threads from openai
       for (const thread of threads) {
-        await gpt.deleteThread(discordServer.id, thread.openAIThreadID);
+        try {
+          await gpt.deleteThread(discordServer.id, thread.openAIThreadID);
+        } catch (err) {
+          logger.error(
+            `Thread not found or could not be deleted: ${thread.openAIThreadID}`,
+            err
+          );
+        }
       }
 
       await database.deleteAllConversationThreads(discordServer.id);

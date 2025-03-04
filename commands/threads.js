@@ -118,8 +118,6 @@ export default {
         });
       }
     } else if (interaction.options.getSubcommand() === "clear") {
-      await interaction.deferReply();
-
       const threads = await database.getConversationThreadsByServerId(
         discordServer.id
       );

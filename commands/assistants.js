@@ -35,7 +35,7 @@ export default {
     );
 
     if (!discordServer.apiKey) {
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Error")
@@ -49,7 +49,7 @@ export default {
       const assistants = await gpt.getAssistants(discordServer.id);
 
       if (!assistants) {
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Error")
@@ -62,7 +62,7 @@ export default {
       const assistantList = assistants
         .map((assistant) => `- ${assistant.name || assistant.id}`)
         .join("\n");
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Available Assistants")
@@ -75,7 +75,7 @@ export default {
       if (
         !interaction.member.permissions.has(PermissionFlagsBits.Administrator)
       ) {
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Permission Denied")
@@ -221,7 +221,7 @@ export default {
       if (
         !interaction.member.permissions.has(PermissionFlagsBits.Administrator)
       ) {
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Permission Denied")
@@ -236,7 +236,7 @@ export default {
       const assistants = await gpt.getAssistants(discordServer.id);
 
       if (!assistants) {
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Error")
@@ -260,7 +260,7 @@ export default {
         assistantSelectMenu
       );
 
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Delete Assistant")

@@ -41,7 +41,7 @@ export default {
       if (
         !interaction.member.permissions.has(PermissionFlagsBits.Administrator)
       ) {
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Permission Denied")
@@ -66,7 +66,7 @@ export default {
             .setStyle(ButtonStyle.Secondary)
         );
 
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Update API Key")
@@ -114,7 +114,7 @@ export default {
         });
       } else {
         await database.createApiKey(discordServer.id, apiKey);
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Success")
@@ -124,7 +124,7 @@ export default {
       }
     } else if (interaction.options.getSubcommand() === "models") {
       if (!discordServer.apiKey) {
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Error")
@@ -141,7 +141,7 @@ export default {
             ? models.map((model) => `- ${model.id}`).join("\n")
             : "Failed to get models from OpenAI."
         );
-      await interaction.reply({ embeds: [embed] });
+      await interaction.editReply({ embeds: [embed] });
     }
   },
 };

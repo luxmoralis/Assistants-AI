@@ -18,7 +18,7 @@ export default {
     );
 
     if (!discordServer.apiKey) {
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Error")
@@ -32,7 +32,7 @@ export default {
       const assistants = await gpt.getAssistants(discordServer.id);
 
       if (!assistants) {
-        await interaction.reply({
+        await interaction.editReply({
           embeds: [
             new EmbedBuilder()
               .setTitle("Error")
@@ -47,7 +47,7 @@ export default {
         value: assistant.id,
       }));
 
-      const response = await interaction.reply({
+      const response = await interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Assistant Selection")

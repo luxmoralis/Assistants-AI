@@ -17,6 +17,6 @@ export default {
       )
       .setColor(0x00ae86);
 
-    await interaction.reply({ embeds: [embed] });
+    await interaction.editReply({ embeds: [embed] });
   },
 };

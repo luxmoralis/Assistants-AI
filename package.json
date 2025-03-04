@@ -18,7 +18,9 @@
     "discord-api-types": "^0.37.103",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",
-    "openai": "^4.68.4"
+    "openai": "^4.68.4",
+    "winston": "^3.17.0",
+    "winston-console-format": "^1.0.8"
   },
   "devDependencies": {
     "nodemon": "^3.1.7",

@@ -1,10 +1,11 @@
 import { Events } from "discord.js";
 import * as database from "../functions/database.js";
 import * as gpt from "../functions/gpt.js";
+import { logger } from "../logger.js";
 
 export default {
   name: Events.MessageCreate,
-  async execute(message) {
+  async execute(client, message) {
     if (message.author.bot || !message.channel.isThread()) return;
 
     const conversationThread = await database.getConversationThreadByChannelID(

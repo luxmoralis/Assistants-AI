@@ -1,15 +1,15 @@
+import dotenv from "dotenv";
+import { fileURLToPath, pathToFileURL } from "url";
+import path, { dirname } from "path";
+import fs from "fs";
+import { logger } from "./logger.js";
 import {
+  Client,
+  Collection,
+  GatewayIntentBits,
   REST,
   Routes,
-  Client,
-  GatewayIntentBits,
-  Collection,
 } from "discord.js";
-import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath, pathToFileURL } from "url";
-import { dirname } from "path";
 
 // Load environment variables
 dotenv.config();
@@ -18,8 +18,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Initialize REST and Client
-const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
+const discordREST = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -27,67 +26,68 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ],
 });
+
 client.commands = new Collection();
 
-// Function to load commands
+// Load commands
 const loadCommands = async () => {
   const commandsPath = path.join(__dirname, "commands");
   const commandFiles = fs
     .readdirSync(commandsPath)
     .filter((file) => file.endsWith(".js"));
-
   for (const file of commandFiles) {
     const filePath = pathToFileURL(path.join(commandsPath, file)).href;
     const commandModule = await import(filePath);
     const command = commandModule.default || commandModule;
     if ("data" in command && "execute" in command) {
       client.commands.set(command.data.name, command);
+      logger.info(`Loaded command ${command.data.name}`);
     } else {
-      console.log(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-      );
+      logger.error(`Command ${file} is missing data or execute method.`);
     }
   }
 };
 
-// Function to load events
+// Load events
 const loadEvents = async () => {
   const eventsPath = path.join(__dirname, "events");
   const eventFiles = fs
     .readdirSync(eventsPath)
     .filter((file) => file.endsWith(".js"));
-
   for (const file of eventFiles) {
     const filePath = pathToFileURL(path.join(eventsPath, file)).href;
     const eventModule = await import(filePath);
     const event = eventModule.default || eventModule;
     if (event.once) {
-      client.once(event.name, (...args) => event.execute(...args));
+      client.once(event.name, (...args) => event.execute(client, ...args));
     } else {
-      client.on(event.name, (...args) => event.execute(...args));
+      client.on(event.name, (...args) => event.execute(client, ...args));
     }
   }
 };
 
-// Function to refresh application commands
+// Refresh commands
 const refreshCommands = async () => {
   try {
-    console.log("Started refreshing application (/) commands.");
-
-    await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
+    logger.info("Started refreshing application (/) commands.");
+    await discordREST.put(Routes.applicationCommands(process.env.CLIENT_ID), {
       body: client.commands.map((command) => command.data.toJSON()),
     });
-
-    console.log("Successfully reloaded application (/) commands.");
+    logger.info("Successfully reloaded application (/) commands.");
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   }
 };
 
-// Initialize bot
+// Initialize the Bot
 const init = async () => {
+  logger.info("Starting bot...");
+  logger.info("Loading commands...");
   await loadCommands();
+  logger.info("Commands loaded.");
+  logger.info("Loading events...");
   await loadEvents();
+  logger.info("Events loaded.");
   await refreshCommands();
   client.login(process.env.BOT_TOKEN);
 };

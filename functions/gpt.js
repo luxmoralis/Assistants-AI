@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { getApiKey } from "./database.js";
+import { logger } from "../logger.js";
 
 const openaiClients = new Map();
 
@@ -67,7 +68,7 @@ export async function deleteAssistant(discordServerId, assistantId) {
     await client.beta.assistants.del(assistantId);
     return true;
   } catch (error) {
-    console.error(`Failed to delete assistant: ${error}`);
+    logger.error(`Failed to delete assistant: ${error}`);
     return false;
   }
 }
